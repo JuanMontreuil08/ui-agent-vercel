@@ -58,7 +58,7 @@ export default function Page() {
         { de: 'bot', tipo: 'texto', contenido: texto },
       ]);
     }
-  } catch (err) {
+  } catch {
     setChat((c) => [
       ...c,
       {
