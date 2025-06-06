@@ -2,38 +2,90 @@
 
 import { useState, FormEvent } from 'react';
 
-type Mensaje = { de: 'usuario' | 'bot'; texto: string };
+type Mensaje = {
+  de: 'usuario' | 'bot';
+  tipo: 'texto' | 'audio';
+  contenido: string;
+};
 
 export default function Page() {
   const [chat, setChat] = useState<Mensaje[]>([]);
-  const [msg,  setMsg]  = useState('');
+  const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
 
   const enviar = async (e: FormEvent) => {
-    e.preventDefault(); if (!msg) return;
+    e.preventDefault();
+    if (!msg) return;
+
     setLoading(true);
-    const res   = await fetch(`/api/agent?idagente=anon&msg=${encodeURIComponent(msg)}`);
-    const texto = await res.text();
-    setChat(c => [...c, { de: 'usuario', texto: msg }, { de: 'bot', texto }]);
-    setMsg(''); setLoading(false);
+
+    try {
+      const res = await fetch(
+        `/api/agent?idagente=anon&msg=${encodeURIComponent(msg)}`
+      );
+      const texto = await res.text();
+
+      // Agrega el mensaje del usuario
+      setChat((c) => [
+        ...c,
+        { de: 'usuario', tipo: 'texto', contenido: msg },
+      ]);
+
+      // Revisa si la respuesta es un audio con "speech1"
+      if (texto.includes('https://storage.googleapis.com/audios_library/speech1')) {
+        setChat((c) => [
+          ...c,
+          { de: 'bot', tipo: 'audio', contenido: texto },
+        ]);
+      } else {
+        setChat((c) => [
+          ...c,
+          { de: 'bot', tipo: 'texto', contenido: texto },
+        ]);
+      }
+    } catch (err) {
+      setChat((c) => [
+        ...c,
+        {
+          de: 'bot',
+          tipo: 'texto',
+          contenido: 'Ocurrió un error al obtener la respuesta.',
+        },
+      ]);
+    }
+
+    setMsg('');
+    setLoading(false);
   };
 
   return (
     <div className="h-full flex flex-col p-4">
       <div className="flex-1 overflow-y-auto space-y-3 pb-4">
-        {chat.map((m,i) => (
-          <div key={i}
-            className={`p-3 rounded max-w-[70%] ${m.de==='usuario'? 'ml-auto bg-blue-100':'mr-auto bg-gray-100'}`}>
-            {m.texto}
+        {chat.map((m, i) => (
+          <div
+            key={i}
+            className={`p-3 rounded max-w-[70%] ${
+              m.de === 'usuario' ? 'ml-auto bg-blue-100' : 'mr-auto bg-gray-100'
+            }`}
+          >
+            {m.tipo === 'audio' ? (
+              <audio controls>
+                <source src={m.contenido} type="audio/mpeg" />
+                Tu navegador no soporta audio.
+              </audio>
+            ) : (
+              <p>{m.contenido}</p>
+            )}
           </div>
         ))}
       </div>
+
       <form onSubmit={enviar} className="mt-2 flex gap-2">
         <input
           className="flex-1 rounded border px-3 py-2"
           placeholder="Escribe tu mensaje…"
           value={msg}
-          onChange={e => setMsg(e.target.value)}
+          onChange={(e) => setMsg(e.target.value)}
           disabled={loading}
           required
         />
