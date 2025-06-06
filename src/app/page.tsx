@@ -14,49 +14,64 @@ export default function Page() {
   const [loading, setLoading] = useState(false);
 
   const enviar = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!msg) return;
+  e.preventDefault();
+  if (!msg) return;
 
-    setLoading(true);
+  setLoading(true);
 
-    try {
-      const res = await fetch(
-        `/api/agent?idagente=anon&msg=${encodeURIComponent(msg)}`
-      );
-      const texto = await res.text();
+  try {
+    const res = await fetch(
+      `/api/agent?idagente=anon&msg=${encodeURIComponent(msg)}`
+    );
+    const texto = await res.text();
 
-      // Agrega el mensaje del usuario
-      setChat((c) => [
-        ...c,
-        { de: 'usuario', tipo: 'texto', contenido: msg },
-      ]);
+    // Agrega el mensaje del usuario
+    setChat((c) => [...c, { de: 'usuario', tipo: 'texto', contenido: msg }]);
 
-      // Revisa si la respuesta es un audio con "speech1"
-      if (texto.includes('https://storage.googleapis.com/audios_library/speech1')) {
+    // Buscar la URL del audio dentro del texto
+    const match = texto.match(
+      /(https:\/\/storage\.googleapis\.com\/audios_library\/speech\d+)/
+    );
+
+    if (match) {
+      const audioUrl = match[1];
+
+      // Mostrar el texto explicativo si quieres
+      const textoSinUrl = texto.replace(audioUrl, '').trim();
+
+      if (textoSinUrl) {
         setChat((c) => [
           ...c,
-          { de: 'bot', tipo: 'audio', contenido: texto },
-        ]);
-      } else {
-        setChat((c) => [
-          ...c,
-          { de: 'bot', tipo: 'texto', contenido: texto },
+          { de: 'bot', tipo: 'texto', contenido: textoSinUrl },
         ]);
       }
-    } catch (err) {
+
+      // Mostrar el audio
       setChat((c) => [
         ...c,
-        {
-          de: 'bot',
-          tipo: 'texto',
-          contenido: 'Ocurrió un error al obtener la respuesta.',
-        },
+        { de: 'bot', tipo: 'audio', contenido: audioUrl },
+      ]);
+    } else {
+      // Si no hay audio, mostrar el texto como siempre
+      setChat((c) => [
+        ...c,
+        { de: 'bot', tipo: 'texto', contenido: texto },
       ]);
     }
+  } catch (err) {
+    setChat((c) => [
+      ...c,
+      {
+        de: 'bot',
+        tipo: 'texto',
+        contenido: 'Ocurrió un error al obtener la respuesta.',
+      },
+    ]);
+  }
 
-    setMsg('');
-    setLoading(false);
-  };
+  setMsg('');
+  setLoading(false);
+};
 
   return (
     <div className="h-full flex flex-col p-4">
