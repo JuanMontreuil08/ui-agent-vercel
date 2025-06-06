@@ -114,7 +114,7 @@ export default function Page() {
           disabled={loading}
           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded disabled:opacity-50"
         >
-          {loading ? '…' : 'Enviar'}
+          {loading ? '…' : 'Send'}
         </button>
       </form>
     </div>
