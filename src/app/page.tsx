@@ -93,6 +93,11 @@ export default function Page() {
             )}
           </div>
         ))}
+        {loading && (
+          <div className="mr-auto bg-gray-100 rounded p-3 max-w-[70%] animate-pulse text-gray-500">
+          Stock Guru is typing...
+          </div>
+        )}
       </div>
 
       <form onSubmit={enviar} className="mt-2 flex gap-2">
