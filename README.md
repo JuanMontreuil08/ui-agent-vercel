@@ -1,58 +1,51 @@
-# 🧠 Interfaz Frontend sin Login – Integración con API en Cloud Run
+# 🧠 Vercel Frontend – Cloud Run API Integration
 
-Este proyecto forma parte del taller [**GCP AI Agent Starter Kit**](https://github.com/macespinoza/gcp-ai-agent-starter-kit). Proporciona una interfaz web construida en **Next.js**, lista para integrarse con una API desplegada en **Cloud Run**, sin necesidad de autenticación.
-
-👉 Puedes usar esta base clonándola y conectándola a tu propio repositorio para luego personalizarla.
+This project is part of the [**Stock Guru API**](https://github.com/JuanMontreuil08/stock-guru-api) repository. It offers a web interface built with **Next.js**, designed to seamlessly integrate with an API deployed on **Cloud Run**.
 
 ---
 
-## 🚀 Clonar y reutilizar el proyecto
+## 🚀 Clone and use this project
 
-No es necesario instalar dependencias desde cero. Solo sigue estos pasos:
+Follow this steps:
 
 ```bash
-# 1. Clona este repositorio
-git clone https://github.com/macespinoza/agentui-withoutlogin
-cd agentui-withoutlogin
+# 1. Clone the Repo
+git clone https://github.com/JuanMontreuil08/ui-agent-vercel.git
+cd ui-agent-vercel
 
-# 2. Elimina la referencia al repositorio original
+# 2. Remove the reference to the original Repo
 git remote remove origin
 ```
 
 ---
 
-## 🔗 Configura la conexión con tu API (Cloud Run)
+## 🔗 Add your API Url (Cloud Run)
 
-Antes de subir tu versión del proyecto, realiza este cambio:
-
-1. Abre el archivo:
+1. Open the file:
 
 ```
 src/app/api/agent/route.ts
 ```
 
-2. Reemplaza la lógica de la URL con la dirección de tu servicio en Cloud Run, por ejemplo:
+2. In line 4, add your API Url including the endpoint, for example:
 
 ```ts
-const url = `https://tu-api-cloudrun.a.run.app/agent?` +
-  new URL(request.url).searchParams.toString();
+const url = 'https://stockbotv2-224560036383.us-west4.run.app/discover?' +
+              new URL(request.url).searchParams.toString();
 ```
 
-Este cambio permite que tu frontend reenvíe correctamente las peticiones al backend.
+In my case, my endpoint is /discover.
 
 ---
 
-## 📤 Subir tu repositorio personalizado
-
-Una vez hayas hecho tus modificaciones:
+## 📤 Push your changes
 
 ```bash
-# 3. Agrega tu propio repositorio remoto
-git remote add origin <tu_repo_propio>
+git remote add origin <your_repo>
 git push -u origin main
 ```
 
-### Para subir cambios futuros:
+### For future changes, execute:
 
 ```bash
 git add .
@@ -92,9 +85,3 @@ Gracias por revisar este repositorio.
 Si te interesa colaborar, aprender más o invitarme a dar una charla, puedes escribirme o seguirme en LinkedIn:
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Miguel%20Cotrina-blue?logo=linkedin&style=flat-square)](https://www.linkedin.com/in/mcotrina/)
-
----
-
-## 🙌 Autor
-
-**Miguel Ángel Cotrina Espinoza**
