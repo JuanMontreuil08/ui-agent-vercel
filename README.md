@@ -55,33 +55,25 @@ git push
 
 ---
 
-## 💬 Variables esperadas por la API
+## 💬 API input variables
 
-En el archivo:
+In the file:
 
 ```
 src/app/page.tsx
 ```
 
-La API espera que se envíen las siguientes variables:
+Your API needs the following variable:
 
-- `msg`: mensaje del usuario.
-- `idagente`: identificador para mantener el historial conversacional.
-
-Puedes adaptarlas según las necesidades de tu solución.
+- `msg`: user's message.
 
 ---
 
-## 📦 Despliegue en Vercel
+## 📦 Deploy on Vercel
 
-Este proyecto está preparado para ser desplegado directamente en [Vercel](https://vercel.com/).  
-Solo debes configurar la variable de entorno `NEXT_PUBLIC_API_URL` apuntando a tu endpoint de Cloud Run.
+1. Create a [Vercel](https://vercel.com/) account.
+2. Create a new project
+3. Choose your Repository
+4. Deploy
 
 ---
-
-## 🤝 Conecta conmigo
-
-Gracias por revisar este repositorio.  
-Si te interesa colaborar, aprender más o invitarme a dar una charla, puedes escribirme o seguirme en LinkedIn:
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Miguel%20Cotrina-blue?logo=linkedin&style=flat-square)](https://www.linkedin.com/in/mcotrina/)
