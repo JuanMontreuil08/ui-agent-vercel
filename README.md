@@ -63,7 +63,7 @@ In the file:
 src/app/page.tsx
 ```
 
-Your API needs the following variable:
+Your API needs the following variables:
 
 - `msg`: user's message.
 
